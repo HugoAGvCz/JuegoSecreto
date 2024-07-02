@@ -3,6 +3,7 @@ let listaNumerosSorteados = [];
 let intentos = 0;
 let palabraIntento = '';
 let numeroMaximo = 10;
+let numeroJuegosMaximo = Math.floor(numeroMaximo / 2);
 let numeroJuegos = 1;
 
 function asignarTextoElemento(elemento, texto) { 
@@ -15,22 +16,16 @@ condicionesIniciales();
 
 function numeroAleatorio() {
     let numeroGenerado = Math.floor(Math.random() * numeroMaximo) + 1; 
-    console.log(Math.floor(numeroMaximo / 2))
-    console.log(listaNumerosSorteados);
-    console.log(numeroGenerado);
+    console.log(numeroJuegos)
 
-    if(listaNumerosSorteados.length === numeroMaximo || numeroJuegos > Math.floor(numeroMaximo / 2)) {
-        asignarTextoElemento('p', 'Ya no hay más números disponibles, reinicia el juego');
+    if (listaNumerosSorteados.includes(numeroGenerado)) {
+        console.log('Número repetido');
+        return numeroAleatorio();
     } else {
-        if (listaNumerosSorteados.includes(numeroGenerado)) {
-            console.log('Número repetido');
-            return numeroAleatorio();
-        } else {
-            listaNumerosSorteados.push(numeroGenerado);
-            numeroJuegos++;
-            return numeroGenerado;
-        }   
-    }
+        listaNumerosSorteados.push(numeroGenerado);
+        numeroJuegos++;
+        return numeroGenerado;
+    }   
 }
 
 function verificar() {
@@ -40,6 +35,11 @@ function verificar() {
         // alert('Ingresa un número válido');
         asignarTextoElemento('p', 'Ingresa un número válido');
         nuevoJuego();
+        return;
+    }
+
+    if(numeroJuegos > numeroJuegosMaximo) {
+        deshabilitarJuego();
         return;
     }
 
@@ -99,6 +99,12 @@ function juegoTerminado() {
     document.getElementById('reiniciar').removeAttribute('disabled');
     document.getElementById('intentar').setAttribute('disabled', 'true');
     return;
+}
+
+function deshabilitarJuego() {
+    document.getElementById('reiniciar').setAttribute('disabled', 'true');
+    document.getElementById('intentar').setAttribute('disabled', 'true');
+    asignarTextoElemento('p', 'Ya no hay más números disponibles, reinicia el juego con F5.');
 }
 
 function factorialRecursivo(numero) {
